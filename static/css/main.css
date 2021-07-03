@@ -4,7 +4,7 @@
     background-color: black;
 }
 
-.main-grid-conatiner {
+.main-grid-container {
     display: grid;
     grid-template-columns: 60% 20%;
 }
