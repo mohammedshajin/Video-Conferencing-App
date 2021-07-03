@@ -63,3 +63,21 @@ btnJoin.addEventListener('click', () => {
 
 
 });
+
+var localStream = new MediaStream();
+const constraints = {
+    'video': true,
+    'audio': true
+};
+
+const localVideo = document.querySelector('#local-video')
+
+var userMedia = navigator.mediaDevices.getUserMedia(constraints)
+    .then(stream => {
+        localStream = stream;
+        localVideo.srcObject = localStream;
+        localVideo.muted = true;
+
+    }).catch(ERROR => {
+        console.log("ERROR ACCESSING MEDIA DEVICES", error);
+    })
