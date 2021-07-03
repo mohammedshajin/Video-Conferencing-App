@@ -5,6 +5,14 @@ var usernameInput = document.querySelector('#username');
 var btnJoin = document.querySelector('#btn-join');
 
 var username;
+var webSocket;
+
+function webSocketOnMessage(event){
+    var parsedData = JSON.parse(event.data);
+    var message = parsedData['message'];
+
+    console.log('messgae: ', message);
+}
 
 btnJoin.addEventListener('click', () => {
     username = usernameInput.value;
@@ -23,4 +31,35 @@ btnJoin.addEventListener('click', () => {
 
     var labelUsername = document.querySelector('#label-username');
     labelUsername.innerHTML = username;
+
+    var loc = window.location;
+    var wsStart = 'ws://';
+
+    if(loc.protocol == 'https'){
+        wsStart = 'wss://';
+    }
+
+    var endPoint = wsStart + loc.host + loc.pathname;
+
+    console.log('endPoint: ', endPoint);
+
+    webSocket = new WebSocket(endPoint);
+
+    webSocket.addEventListener('open', (e) => {
+        console.log('connection opened!');
+
+        var jsonStr = JSON.stringify({
+            'message': 'This is a message',
+        });
+        webSocket.send(jsonStr);
+    });
+    webSocket.addEventListener('message', webSocketOnMessage );
+    webSocket.addEventListener('close', (e) => {
+        console.log('connection closed!');
+    });
+    webSocket.addEventListener('error', (e) => {
+        console.log('Error occured!');
+    });
+
+
 });
